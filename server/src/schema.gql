@@ -1,0 +1,67 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Customer {
+  id: Int!
+  username: String!
+  allocations: [Allocation!]
+}
+
+type Allocation {
+  id: Int!
+  name: String!
+  amount: Int!
+  target: Float
+  customerId: Int
+  customer: Customer
+}
+
+type Query {
+  allocations(getAllocationsInput: GetAllocationsInput!): [Allocation!]!
+  allocationsTotalAmount(sumAllocationsInput: GetAllocationsInput!): Float!
+  customers: [Customer!]!
+  customer(getCustomerInput: GetCustomerInput!): Customer!
+}
+
+input GetAllocationsInput {
+  name: String
+  amount: Int
+  target: Float
+  customerId: Int!
+}
+
+input GetCustomerInput {
+  id: Int
+}
+
+type Mutation {
+  createAllocation(createAllocationInput: CreateAllocationInput!): Allocation!
+  updateAllocation(updateAllocationInput: UpdateAllocationInput!): Allocation!
+  deleteAllocation(deleteAllocationInput: DeleteAllocationInput!): Boolean!
+  createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
+}
+
+input CreateAllocationInput {
+  name: String!
+  amount: Int!
+  target: Float!
+  customerId: Int!
+}
+
+input UpdateAllocationInput {
+  id: Int!
+  customerId: Int!
+  name: String
+  amount: Int
+  target: Float
+}
+
+input DeleteAllocationInput {
+  id: Int!
+  customerId: Int!
+}
+
+input CreateCustomerInput {
+  username: String!
+}
