@@ -2,6 +2,9 @@
 /dist
 /node_modules
 
+#ide
+.vscode
+
 # Logs
 logs
 *.log
@@ -15,7 +18,6 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
-/coverage
 /.nyc_output
 
 # IDEs and editors
