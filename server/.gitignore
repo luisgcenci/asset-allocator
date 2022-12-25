@@ -18,7 +18,11 @@ lerna-debug.log*
 .DS_Store
 
 # Tests
+/coverage
 /.nyc_output
+
+# Documentation
+/documentation
 
 # IDEs and editors
 /.idea
