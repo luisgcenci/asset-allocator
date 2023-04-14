@@ -1,6 +1,6 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test } from '@nestjs/testing';
-import { Allocation } from 'allocation/allocation.entity';
+import { AssetClass } from 'asset_class/asset_class.entity';
 import { ValidationError } from 'apollo-server-express';
 import { Customer } from './customer.entity';
 import { CustomerResolver } from './customer.resolver';
@@ -13,9 +13,9 @@ describe('CustomerResolver', () => {
   const mockedCustomer = new Customer();
   mockedCustomer.username = 'jest';
   mockedCustomer.id = 1;
-  const mockedAllocation = new Allocation();
-  mockedAllocation.id = 1;
-  mockedAllocation.customerId = 293;
+  const assetClass = new AssetClass();
+  assetClass.id = 1;
+  assetClass.customerId = 293;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
@@ -73,10 +73,10 @@ describe('CustomerResolver', () => {
   });
 
   it('allocations should return collection of Allocations', async () => {
-    const result = [mockedAllocation, mockedAllocation];
+    const result = [assetClass, assetClass];
 
-    jest.spyOn(customerService, 'getAllocations').mockResolvedValue(result);
-    expect(await customerResolver.allocations(mockedCustomer)).toStrictEqual(
+    jest.spyOn(customerService, 'getAssetClasses').mockResolvedValue(result);
+    expect(await customerResolver.assetClasses(mockedCustomer)).toStrictEqual(
       result,
     );
   });

@@ -13,15 +13,13 @@ const root = ReactDOM.createRoot(
 );
 
 root.render(
-	<React.StrictMode>
-		<Router>
-			<Provider store={store}>
-				<PersistGate loading={null} persistor={persistor}>
-					<App />
-				</PersistGate>
-			</Provider>
-		</Router> 
-	</React.StrictMode>
+	<Router>
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
+				<App />
+			</PersistGate>
+		</Provider>
+	</Router> 
 );
 
 // If you want to start measuring performance in your app, pass a function

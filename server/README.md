@@ -142,3 +142,67 @@ server
 	```
 16. Create a Pull Request
 17. Pull request will be accepted, merged and closed by a reviewer.
+
+# Deployments
+
+## Dockerizing
+
+1. Install and switch to supported Node Version.
+
+```
+nvm install
+nvm use
+```
+
+2. Install Dependencies
+
+```
+npm install
+```
+
+3. Build Project
+
+```
+npm run build
+```
+
+4. Build Image
+
+```
+docker build -t <docker_username>/asset-allocator-server-app .
+```
+
+5. Run Image
+
+```
+docker run --name asset-allocator-server-app -d -p 4000:4000 <docker_username>/asset-allocator-server-app
+```
+
+## Locally in Minikube (Kubernetes)
+
+1. Push Image to Dockerhub
+
+```
+docker push <docker_username>/asset-allocator-server-app
+```
+
+2. Start Minikube
+
+```
+minikube start
+```
+
+3. Start Deployment on Kubernetes
+
+```
+alias kubectl="minikube kubectl --"
+cd infra
+kubecetl apply -f asset-allocator-server-app-deployment.yaml
+```
+
+4. Start Service
+
+```
+kubectl get svc
+minikube service <service_name> --url
+```

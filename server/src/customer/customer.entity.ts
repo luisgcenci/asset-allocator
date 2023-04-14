@@ -6,7 +6,7 @@ import {
   Index,
 } from 'typeorm';
 import { Field, ObjectType, Int } from '@nestjs/graphql';
-import { Allocation } from 'allocation/allocation.entity';
+import { AssetClass } from 'asset_class/asset_class.entity';
 
 /**
  * Customer Entity
@@ -32,7 +32,7 @@ export class Customer {
   /**
    * Allocations associated with Customer
    */
-  @OneToMany(() => Allocation, (allocation) => allocation.customer)
-  @Field(() => [Allocation], { nullable: true })
-  allocations?: Allocation[];
+  @OneToMany(() => AssetClass, (assetClass) => assetClass.customer)
+  @Field(() => [AssetClass], { nullable: true })
+  assetClasses?: AssetClass[];
 }

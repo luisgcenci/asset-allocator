@@ -6,7 +6,7 @@ import {
   Parent,
   ResolveField,
 } from '@nestjs/graphql';
-import { Allocation } from 'allocation/allocation.entity';
+import { AssetClass } from 'asset_class/asset_class.entity';
 import { ValidationError } from 'apollo-server-express';
 import { Customer } from './customer.entity';
 import { CustomerService } from './customer.service';
@@ -62,12 +62,12 @@ export class CustomerResolver {
   }
 
   /**
-   * Gets allcations related to customer
+   * Gets asset classes related to customer
    * @param customer Customer
-   * @returns Collection of Allocations
+   * @returns Collection of Asset Class
    */
-  @ResolveField(() => [Allocation])
-  async allocations(@Parent() customer: Customer): Promise<Allocation[]> {
-    return this.customerService.getAllocations(customer.id);
+  @ResolveField(() => [AssetClass])
+  async assetClasses(@Parent() customer: Customer): Promise<AssetClass[]> {
+    return this.customerService.getAssetClasses(customer.id);
   }
 }

@@ -12,48 +12,48 @@ import { Customer } from '../customer/customer.entity';
  * Allocation Entity
  */
 @ObjectType()
-@Entity('allocation')
+@Entity('asset_class')
 @Index(['name', 'customerId'], { unique: true })
-export class Allocation {
+export class AssetClass {
   /**
-   * Allocation ID
+   * Asset Class ID
    */
   @PrimaryGeneratedColumn()
   @Field(() => Int)
   id: number;
 
   /**
-   * Allocation Name
+   * Asset Class Name
    */
   @Column()
   @Field()
   name: string;
 
   /**
-   * Allocation Amount
+   * Asset Class Amount
    */
   @Column()
   @Field(() => Int)
   amount: number;
 
   /**
-   * Allocation Target Percentage
+   * Asset Class Target Percentage
    */
   @Column({ type: 'decimal', precision: 3, scale: 2 })
   @Field({ nullable: true })
   target: number;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Class
    */
   @Column()
   @Field(() => Int, { nullable: true })
   customerId: number;
 
   /**
-   * Customer associated with Allocation
+   * Customer associated with Asset Class
    */
-  @ManyToOne(() => Customer, (customer) => customer.allocations)
+  @ManyToOne(() => Customer, (customer) => customer.assetClasses)
   @Field(() => Customer, { nullable: true })
   customer: Customer;
 }

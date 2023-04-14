@@ -7,8 +7,8 @@ import {
 } from './dto/customer.dto';
 import { CustomerRepository } from './customer.repository';
 import { ValidationError } from 'apollo-server-express';
-import { Allocation } from 'allocation/allocation.entity';
-import { AllocationService } from 'allocation/allocation.service';
+import { AssetClass } from 'asset_class/asset_class.entity';
+import { AssetClassService } from 'asset_class/asset_class.service';
 
 /**
  * Customer Service
@@ -24,8 +24,8 @@ export class CustomerService {
   constructor(
     @Inject(CustomerRepository)
     private customerRepository: CustomerRepository,
-    @Inject(forwardRef(() => AllocationService))
-    private allocationService: AllocationService,
+    @Inject(forwardRef(() => AssetClassService))
+    private assetClassService: AssetClassService,
   ) {
     this.logger = new Logger();
   }
@@ -129,8 +129,8 @@ export class CustomerService {
    * @param customerId Customer ID
    * @returns Collection of allocations
    */
-  async getAllocations(customerId: number): Promise<Allocation[]> {
-    return this.allocationService.getAllocations({
+  async getAssetClasses(customerId: number): Promise<AssetClass[]> {
+    return this.assetClassService.getAssetClasses({
       customerId: customerId,
     });
   }

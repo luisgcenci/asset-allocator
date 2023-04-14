@@ -1,7 +1,7 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Test } from '@nestjs/testing';
-import { Allocation } from 'allocation/allocation.entity';
-import { AllocationService } from 'allocation/allocation.service';
+import { AssetClass } from 'asset_class/asset_class.entity';
+import { AssetClassService } from 'asset_class/asset_class.service';
 import { ValidationError } from 'apollo-server-express';
 import { Customer } from './customer.entity';
 import { CustomerRepository } from './customer.repository';
@@ -9,13 +9,13 @@ import { CustomerService } from './customer.service';
 
 describe('CustomerService', () => {
   let customerService: CustomerService;
-  let allocationService: AllocationService;
+  let assetClassService: AssetClassService;
   let customerRepository: CustomerRepository;
 
   const mockedCustomer = new Customer();
   mockedCustomer.username = 'jest';
   mockedCustomer.id = 1;
-  const mockedAllocation = new Allocation();
+  const mockedAllocation = new AssetClass();
   mockedAllocation.id = 12;
   mockedAllocation.customerId = 999;
 
@@ -27,7 +27,7 @@ describe('CustomerService', () => {
       .compile();
 
     customerService = module.get<CustomerService>(CustomerService);
-    allocationService = module.get<AllocationService>(AllocationService);
+    assetClassService = module.get<AssetClassService>(AssetClassService);
     customerRepository = module.get<CustomerRepository>(CustomerRepository);
   });
 
@@ -201,14 +201,16 @@ describe('CustomerService', () => {
     });
   });
 
-  describe('getAllocations', () => {
-    it('should return collection of allocations', async () => {
+  describe('getAssetClasses', () => {
+    it('should return collection of asset classes', async () => {
       const result = [mockedAllocation, mockedAllocation];
 
-      jest.spyOn(allocationService, 'getAllocations').mockResolvedValue(result);
+      jest
+        .spyOn(assetClassService, 'getAssetClasses')
+        .mockResolvedValue(result);
 
       expect(
-        await customerService.getAllocations(mockedCustomer.id),
+        await customerService.getAssetClasses(mockedCustomer.id),
       ).toStrictEqual(result);
     });
   });

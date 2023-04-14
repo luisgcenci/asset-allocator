@@ -1,16 +1,17 @@
-html{
-    display: flex;
-    height: 100%;
-    width: 100%;
+html {
+	display: flex;
+	min-height: 100vh;
+	width: 100%;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
-  
-body{
-    display: flex;
-    flex: 1;
-    margin: 0;
+
+body {
+	display: flex;
+	flex: 1;
+	margin: 0;
 }
-  
-#root{
-    display: flex;
-    flex: 1;
+
+#root {
+	display: flex;
+	flex: 1;
 }

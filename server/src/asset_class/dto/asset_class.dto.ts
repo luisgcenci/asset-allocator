@@ -2,135 +2,98 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { Column } from 'typeorm';
 
 /**
- * Input for creating Allocation
+ * Input for creating Asset Class
  */
 @InputType()
-export class CreateAllocationInput {
+export class CreateAssetClassInput {
   /**
-   * Allocation Name
+   * Asset Class Name
    */
   @Field()
   name: string;
 
   /**
-   * Allocation Amount
+   * Asset Class Amount
    */
   @Field(() => Int)
   amount: number;
 
   /**
-   * Allocation Target Percentage
+   * Asset Class Target Percentage
    */
   @Column({ type: 'decimal', precision: 3, scale: 2 })
   @Field()
   target: number;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Class
    */
   @Field(() => Int)
   customerId: number;
 }
 
 /**
- * Input for getting collection of allocations
+ * Input for getting collection of Asset Classs
  */
 @InputType()
-export class GetAllocationsInput {
+export class GetAssetClassesInput {
   /**
-   * Allocation Name
+   * Asset Class Name
    */
   @Field({ nullable: true })
   name?: string;
 
   /**
-   * Allocation Amount
+   * Asset Class Amount
    */
   @Field(() => Int, { nullable: true })
   amount?: number;
 
   /**
-   * Allocation Target Percentage
+   * Asset Class Target Percentage
    */
   @Column({ type: 'decimal', precision: 3, scale: 2 })
   @Field({ nullable: true })
   target?: number;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Classs
    */
   @Field(() => Int)
   customerId: number;
 }
 
 /**
- * Input for getting specific allocation
+ * Input for getting specific Asset Class
  */
 @InputType()
-export class GetAllocationInput {
+export class GetAssetClassInput {
   /**
-   * Allocation ID
+   * Asset Class ID
    */
   @Field(() => Int)
   id: number;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Class
    */
   @Field(() => Int)
   customerId: number;
 
   /**
-   * Allocation Name
+   * Asset Class Name
    */
   @Field({ nullable: true })
   name?: string;
 
   /**
-   * Allocation Amount
+   * Asset Class Amount
    */
   @Field(() => Int, { nullable: true })
   amount?: number;
 
   /**
-   * Allocation Target Percentage
-   */
-  @Column({ type: 'decimal', precision: 3, scale: 2 })
-  @Field({ nullable: true })
-  target?: number;
-}
-
-/**
- * Input for updating specific allocation
- */
-@InputType()
-export class UpdateAllocationInput {
-  /**
-   * Allocation ID
-   */
-  @Field(() => Int)
-  id: number;
-
-  /**
-   * Customer ID associated with Allocation
-   */
-  @Field(() => Int)
-  customerId: number;
-
-  /**
-   * Allocation Name
-   */
-  @Field({ nullable: true })
-  name?: string;
-
-  /**
-   * Allocation Amount
-   */
-  @Field(() => Int, { nullable: true })
-  amount?: number;
-
-  /**
-   * Allocation Target Percentage
+   * Asset Class Target Percentage
    */
   @Column({ type: 'decimal', precision: 3, scale: 2 })
   @Field({ nullable: true })
@@ -138,55 +101,107 @@ export class UpdateAllocationInput {
 }
 
 /**
- * Input for deleting specific allocation
+ * Input for updating specific Asset Class
  */
 @InputType()
-export class DeleteAllocationInput {
+export class UpdateAssetClassInput {
   /**
-   * Allocation ID
+   * Asset Class ID
    */
   @Field(() => Int)
   id: number;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Class
+   */
+  @Field(() => Int)
+  customerId: number;
+
+  /**
+   * Asset Class Name
+   */
+  @Field({ nullable: true })
+  name?: string;
+
+  /**
+   * Asset Class Amount
+   */
+  @Field(() => Int, { nullable: true })
+  amount?: number;
+
+  /**
+   * Asset Class Target Percentage
+   */
+  @Column({ type: 'decimal', precision: 3, scale: 2 })
+  @Field({ nullable: true })
+  target?: number;
+}
+
+/**
+ * Input for deleting specific Asset Class
+ */
+@InputType()
+export class DeleteAssetClassInput {
+  /**
+   * Asset Class ID
+   */
+  @Field(() => Int)
+  id: number;
+
+  /**
+   * Customer ID associated with Asset Class
    */
   @Field(() => Int)
   customerId: number;
 }
 
 /**
- * Input for checking if specific allocation exists
+ * Input for checking if specific Asset Class exists
  */
 @InputType()
-export class AllocationExistsInput {
+export class AssetClassExistsInput {
   /**
-   * Allocation ID
+   * Asset Class ID
    */
   @Field(() => Int)
   id: number;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Class
    */
   @Field(() => Int)
   customerId: number;
 }
 
 /**
- * Input for checking if allocation name exists
+ * Input for checking if Asset Class name exists
  */
 @InputType()
-export class AllocationNameExistsInput {
+export class AssetClassNameExistsInput {
   /**
-   * Allocation Name
+   * Asset Class Name
    */
   @Field()
   name: string;
 
   /**
-   * Customer ID associated with Allocation
+   * Customer ID associated with Asset Class
    */
   @Field(() => Int)
   customerId: number;
+}
+
+@InputType()
+export class CalculateInput {
+  /**
+   * Customer ID associated with Asset Classs
+   */
+  @Field(() => Int)
+  customerId: number;
+
+  /**
+   * New Investment Amount
+   */
+  @Field(() => Int)
+  amount: number;
 }

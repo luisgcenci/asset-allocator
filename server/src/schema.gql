@@ -5,10 +5,10 @@
 type Customer {
   id: Int!
   username: String!
-  allocations: [Allocation!]
+  assetClasses: [AssetClass!]
 }
 
-type Allocation {
+type AssetClass {
   id: Int!
   name: String!
   amount: Int!
@@ -18,13 +18,13 @@ type Allocation {
 }
 
 type Query {
-  allocations(getAllocationsInput: GetAllocationsInput!): [Allocation!]!
-  allocationsTotalAmount(sumAllocationsInput: GetAllocationsInput!): Float!
+  assetClasses(getAssetClassesInput: GetAssetClassesInput!): [AssetClass!]!
+  assetClassesTotalAmount(sumAssetClassesInput: GetAssetClassesInput!): Float!
   customers: [Customer!]!
   customer(getCustomerInput: GetCustomerInput!): Customer!
 }
 
-input GetAllocationsInput {
+input GetAssetClassesInput {
   name: String
   amount: Int
   target: Float
@@ -36,20 +36,21 @@ input GetCustomerInput {
 }
 
 type Mutation {
-  createAllocation(createAllocationInput: CreateAllocationInput!): Allocation!
-  updateAllocation(updateAllocationInput: UpdateAllocationInput!): Allocation!
-  deleteAllocation(deleteAllocationInput: DeleteAllocationInput!): Boolean!
+  createAssetClass(createAssetClassInput: CreateAssetClassInput!): AssetClass!
+  updateAssetClass(updateAssetClassInput: UpdateAssetClassInput!): AssetClass!
+  deleteAssetClass(deleteAssetClassInput: DeleteAssetClassInput!): Boolean!
+  SimulateNewAllocations: [AssetClass!]!
   createCustomer(createCustomerInput: CreateCustomerInput!): Customer!
 }
 
-input CreateAllocationInput {
+input CreateAssetClassInput {
   name: String!
   amount: Int!
   target: Float!
   customerId: Int!
 }
 
-input UpdateAllocationInput {
+input UpdateAssetClassInput {
   id: Int!
   customerId: Int!
   name: String
@@ -57,7 +58,7 @@ input UpdateAllocationInput {
   target: Float
 }
 
-input DeleteAllocationInput {
+input DeleteAssetClassInput {
   id: Int!
   customerId: Int!
 }

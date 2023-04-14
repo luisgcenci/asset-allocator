@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Allocation } from './allocation/allocation.entity';
-import { AllocationModule } from './allocation/allocation.module';
+import { AssetClass } from './asset_class/asset_class.entity';
+import { AssetClassModule } from './asset_class/asset_class.module';
 import { Customer } from './customer/customer.entity';
 import { CustomerModule } from './customer/customer.module';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -17,7 +17,7 @@ import { join } from 'path';
       username: 'luisribeiro',
       password: 'luisribeiro',
       database: 'assetallocator',
-      entities: [Allocation, Customer],
+      entities: [AssetClass, Customer],
       synchronize: true,
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
@@ -27,7 +27,7 @@ import { join } from 'path';
         return new Error(error.message);
       },
     }),
-    AllocationModule,
+    AssetClassModule,
     CustomerModule,
   ],
 })

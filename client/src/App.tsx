@@ -1,12 +1,14 @@
 import { FC } from "react";
-import AppOne from "apps/app-one/AppOne";
-import styles from "./css/App.module.css";
+import { Outlet, Route, Routes } from "react-router-dom";
+import Home from "pages/home/Home";
 
 const App: FC = () => {
   return (
-    <div className={styles.App}>
-      <AppOne />
-    </div>
+		<Routes>
+			<Route path="/" element={<Outlet />}>
+				<Route path="/" element={<Home />} />
+			</Route>
+		</Routes>
   );
 };
 
