@@ -70,20 +70,20 @@ client
 
 # Code Analysis & Style
 
-## **Tools**: 
+## **Tools**:
 
 - ESLint
-	```
-	npx prettier --write <file_name>
-	or
-	npx prettier --write <directory_name>
-	```
+  ```
+  npx prettier --write <file_name>
+  or
+  npx prettier --write <directory_name>
+  ```
 - Prettier
-	```
-	npx prettier --write <file_name>
-	or
-	npx prettier --write <directory_name>
-	```
+  ```
+  npx prettier --write <file_name>
+  or
+  npx prettier --write <directory_name>
+  ```
 
 ## **ESLint Config**
 
@@ -104,68 +104,70 @@ client
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) with TypeScript
 
 ## **Important Rules:**
-* Perform work in a feature branch
-* Never push into `main` or `poc` branch. Make a Pull Request.
+
+- Perform work in a feature branch
+- Never push into `main` or `poc` branch. Make a Pull Request.
 
 ## **How to:**
+
 1. Clone this repository
-	```
-	git clone https://github.com/QAS-Labs/uta-user-interface.git
-	```
-2. Switch to branch `poc`
-	```
-	git checkout poc
-	```
+   ```
+   git clone https://github.com/QAS-Labs/uta-user-interface.git
+   ```
+2. Switch to branch `po`
+   ```
+   git checkout poc
+   ```
 3. Create a new branch for your feature/work:
-	```
-	git checkout -b new-branch
-	```
+   ```
+   git checkout -b new-branch
+   ```
 4. Install and switch to supported Node Version.
-	```
-	nvm install
-	nvm use
-	```
+   ```
+   nvm install
+   nvm use
+   ```
 5. Install Dependencies
-	```
-	npm install
-	```
+   ```
+   npm install
+   ```
 6. Run and make changes
-	```
-	npm start
-	```
+   ```
+   npm start
+   ```
 7. Lint Code
-	```
-	npx eslint <file_name>
-	or
-	npx eslint <directory_name>
-	```
+   ```
+   npx eslint <file_name>
+   or
+   npx eslint <directory_name>
+   ```
 8. Format Code
-	```
-	npx prettier --write <file_name>
-	or
-	npx prettier --write <directory_name>
-	```
+   ```
+   npx prettier --write <file_name>
+   or
+   npx prettier --write <directory_name>
+   ```
 9. Test it
-	```
-	npm test
-	```
+   ```
+   npm test
+   ```
 10. Build
-	```
-	npm run build
-	```
+    ```
+    npm run build
+    ```
 11. Add changes to Git
-	```
-	git add <file_name>
-	or
-	git add <directory_name>
-	```
+    ```
+    git add <file_name>
+    or
+    git add <directory_name>
+    ```
 12. Commit Changes to Git
-	```
-	git commit -m ""
-	```
+    ```
+    git commit -m ""
+    ```
 13. Push Changes to GitHub
-	```
-	git push -u origin new-branch
-	```
+    ```
+    git push -u origin new-branch
+    ```
 14. Create a Pull Request
 15. Pull request will be accepted, merged and close by a reviewer.
