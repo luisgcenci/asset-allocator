@@ -114,7 +114,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
    ```
    git clone https://github.com/QAS-Labs/uta-user-interface.git
    ```
-2. Switch to branch `po`
+2. Switch to branch `poc`
    ```
    git checkout poc
    ```
