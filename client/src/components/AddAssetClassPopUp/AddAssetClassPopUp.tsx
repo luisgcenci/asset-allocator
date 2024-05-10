@@ -8,14 +8,14 @@ import {
 	InputAdornment,
 	TextField,
 } from "@mui/material";
+import { useAppDispatch, useAppSelector } from "hooks/hooks";
 import React from "react";
 import AssetClasses from "services/AssetClasses";
+import { updateAll } from "store/features/dataSlice";
 
 interface IAddAssetClassPopUp {
-	currentTotalTarget: number;
 	closeModal: () => void;
 	open: boolean;
-	updateData: () => void;
 }
 
 const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
@@ -27,32 +27,29 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 		target: 0,
 	});
 	const [alert, setAlert] = React.useState<React.ReactNode>();
+	const totalTarget = useAppSelector((state) => state.data.totalTarget);
+	const dispatch = useAppDispatch();
 
 	const handleSave = async () => {
-		await AssetClasses.createAssetClass(
-			formData.name,
-			formData.amount,
-			formData.target
-		);
+		await AssetClasses.createAssetClass(formData.name, formData.target / 100);
 
 		setAlert(<Alert severity="success">new asset saved</Alert>);
 
-		props.updateData();
+		await dispatch(updateAll());
 	};
 
-	const handleAmountInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-		let value = e.target.value.replace(/,/g, '');
-		let valueAsNum = Number(value);
-		valueAsNum = isNaN(valueAsNum) ? formData.amount : valueAsNum;
-		setFormData({ ...formData, amount: valueAsNum })
-	}
-
-	const handleTargetInput = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+	const handleTargetInput = (
+		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+	) => {
 		let value = Number(e.target.value);
-		value = isNaN(value) || value > 100 || (value / 100) + props.currentTotalTarget > 1 ? formData.target : value;
-		setFormData({ ...formData, target: value })
-	}
 
+		value =
+			isNaN(value) || value > 100 || value + totalTarget * 100 > 100
+				? formData.target
+				: value;
+
+		setFormData({ ...formData, target: value });
+	};
 	return (
 		<Dialog open={props.open} onClose={props.closeModal}>
 			<DialogTitle align="center" style={{ paddingTop: "3vh" }}>
@@ -79,32 +76,13 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 				<TextField
 					required
 					margin="dense"
-					label="Amount"
-					type="text"
-					fullWidth
-					variant="outlined"
-					value={
-						formData.amount > 0 ? Number(formData.amount).toLocaleString() : ""
-					}
-					onChange={(e) => handleAmountInput(e)}
-					placeholder="1000"
-					InputProps={{
-						startAdornment: <InputAdornment position="start">$</InputAdornment>,
-						inputProps: {
-							maxLength: 8,
-						},
-					}}
-				/>
-				<TextField
-					required
-					margin="dense"
 					label="Target allocation"
 					type="text"
 					fullWidth
 					variant="outlined"
 					value={formData.target > 0 ? formData.target : ""}
 					onChange={(e) => handleTargetInput(e)}
-					placeholder={Math.round((1 - props.currentTotalTarget) * 100).toString()}
+					placeholder={((1 - totalTarget) * 100).toFixed(0)}
 					InputProps={{
 						endAdornment: <InputAdornment position="end">%</InputAdornment>,
 						inputProps: {

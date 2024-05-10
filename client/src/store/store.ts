@@ -2,7 +2,7 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import thunk from "redux-thunk";
 import storage from "redux-persist/lib/storage";
-import sampleSlice from "store/features/sampleSlice";
+import dataSlice from "store/features/dataSlice";
 
 const persistConfig = {
 	key: "root",
@@ -10,14 +10,15 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-	sample: sampleSlice,
+	data: dataSlice,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
 	reducer: persistedReducer,
-	middleware: [thunk],
+	middleware: (getDefaultMiddleware) =>
+		getDefaultMiddleware({ serializableCheck: false }).prepend(),
 });
 
 export const persistor = persistStore(store);
