@@ -6,54 +6,53 @@ import {
 	DialogContent,
 	DialogTitle,
 	InputAdornment,
+	MenuItem,
 	TextField,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "hooks/hooks";
 import React from "react";
-import AssetClasses from "services/AssetClasses";
+import AssetsService from "services/AssetsService";
 import { updateAll } from "store/features/dataSlice";
 
-interface IAddAssetClassPopUp {
+interface IAddAssetPopUp {
 	closeModal: () => void;
 	open: boolean;
 }
 
-const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
-	props: IAddAssetClassPopUp
-) => {
+const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 	const [formData, setFormData] = React.useState({
 		name: "",
-		amount: 0,
-		target: 0,
+		marketValue: 0,
+		assetClass: "",
 	});
 	const [alert, setAlert] = React.useState<React.ReactNode>();
-	const totalTarget = useAppSelector((state) => state.data.totalTarget);
 	const dispatch = useAppDispatch();
+	const data = useAppSelector((state) => state.data);
 
 	const handleSave = async () => {
-		await AssetClasses.createAssetClass(formData.name, formData.target / 100);
+		await AssetsService.createAsset(
+			formData.name,
+			formData.marketValue,
+			formData.assetClass
+		);
 
 		setAlert(<Alert severity="success">new asset saved</Alert>);
-
-		await dispatch(updateAll());
+		dispatch(updateAll());
 	};
 
-	const handleTargetInput = (
+	const handleMarketValueInput = (
 		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
 	) => {
-		let value = Number(e.target.value);
-
-		value =
-			isNaN(value) || value > 100 || value + totalTarget * 100 > 100
-				? formData.target
-				: value;
-
-		setFormData({ ...formData, target: value });
+		const value = e.target.value.replace(/,/g, "");
+		let valueAsNum = Number(value);
+		valueAsNum = isNaN(valueAsNum) ? formData.marketValue : valueAsNum;
+		setFormData({ ...formData, marketValue: valueAsNum });
 	};
+
 	return (
 		<Dialog open={props.open} onClose={props.closeModal}>
 			<DialogTitle align="center" style={{ paddingTop: "3vh" }}>
-				ADD NEW ASSET CLASS
+				ADD NEW ASSET
 			</DialogTitle>
 			<DialogContent>
 				<TextField
@@ -66,7 +65,7 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 					variant="outlined"
 					value={formData.name}
 					onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-					placeholder="STOCKS"
+					placeholder="VOO"
 					InputProps={{
 						inputProps: {
 							maxLength: 24,
@@ -76,20 +75,49 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 				<TextField
 					required
 					margin="dense"
-					label="Target allocation"
+					label="Market value"
 					type="text"
 					fullWidth
 					variant="outlined"
-					value={formData.target > 0 ? formData.target : ""}
-					onChange={(e) => handleTargetInput(e)}
-					placeholder={((1 - totalTarget) * 100).toFixed(0)}
+					value={
+						formData.marketValue > 0
+							? Number(formData.marketValue).toLocaleString()
+							: ""
+					}
+					onChange={(e) => handleMarketValueInput(e)}
+					placeholder="1000"
 					InputProps={{
-						endAdornment: <InputAdornment position="end">%</InputAdornment>,
+						startAdornment: <InputAdornment position="start">€</InputAdornment>,
 						inputProps: {
-							maxLength: 3,
+							maxLength: 8,
 						},
 					}}
 				/>
+				<TextField
+					select
+					required
+					autoFocus
+					margin="dense"
+					label="Asset class"
+					fullWidth
+					variant="outlined"
+					value={formData.assetClass}
+					onChange={(e) =>
+						setFormData({ ...formData, assetClass: e.target.value })
+					}
+					placeholder="STOCKS"
+					InputProps={{
+						inputProps: {
+							maxLength: 24,
+						},
+					}}
+				>
+					{data.assetClasses.map((option) => (
+						<MenuItem key={option.id} value={option.id}>
+							{option.asset_classes_name}
+						</MenuItem>
+					))}
+				</TextField>
 			</DialogContent>
 			<DialogActions style={{ marginRight: "1vw" }}>
 				<Button
@@ -109,4 +137,4 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 	);
 };
 
-export default AddAssetClassPopUp;
+export default AddAssetPopUp;
