@@ -71,7 +71,6 @@ client
 # Code Analysis & Style
 
 ## **Tools**:
-## **Tools**:
 
 - ESLint
   ```
@@ -79,17 +78,7 @@ client
   or
   npx prettier --write <directory_name>
   ```
-  ```
-  npx prettier --write <file_name>
-  or
-  npx prettier --write <directory_name>
-  ```
 - Prettier
-  ```
-  npx prettier --write <file_name>
-  or
-  npx prettier --write <directory_name>
-  ```
   ```
   npx prettier --write <file_name>
   or

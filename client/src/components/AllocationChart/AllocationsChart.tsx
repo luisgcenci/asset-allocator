@@ -1,11 +1,15 @@
 import React from "react";
 import Chart from "react-apexcharts";
+import { UserAssetClassesData } from "services/AssetClasses";
 import styles from "./AllocationsChart.module.css";
-import { useAppSelector } from "hooks/hooks";
 
-const AllocationsChart: React.FC = () => {
-	const data = useAppSelector((state) => state.data);
+interface IAllocationsChart {
+	userAssetClassesData: UserAssetClassesData;
+}
 
+const AllocationsChart: React.FC<IAllocationsChart> = (
+	props: IAllocationsChart
+) => {
 	const options = {
 		plotOptions: {
 			treemap: {
@@ -34,7 +38,7 @@ const AllocationsChart: React.FC = () => {
 				const x = infoPath.x;
 				const y = infoPath.y;
 				const z = infoPath.z;
-				return `${x}: €${y} (${z}%)`;
+				return `${x}: $${y} (${z}%)`;
 			},
 			offsetY: -4,
 		},
@@ -45,32 +49,18 @@ const AllocationsChart: React.FC = () => {
 
 	type SeriesDataItem = {
 		x: string;
-		y: string;
+		y: number;
 		z: number;
 	};
 
 	const getSeries = (): { data: SeriesDataItem[] }[] => {
 		const seriesData: SeriesDataItem[] = [];
 
-		data.assetClasses.map((assetClass) => {
-			const assetClassTotalAmount = data.assets.reduce(
-				(sum, { asset_market_value, expand }) => {
-					if (expand.asset_class.id === assetClass.id) {
-						return sum + asset_market_value;
-					}
-					return sum;
-				},
-				0
-			);
-
+		props.userAssetClassesData.assetClasses.map((assetClass) => {
 			seriesData.push({
 				x: assetClass.asset_classes_name,
-				y: assetClassTotalAmount.toLocaleString("en-US", {
-					style: "decimal",
-					minimumFractionDigits: 0,
-					maximumFractionDigits: 0,
-				}),
-				z: Math.round((assetClassTotalAmount / data.totalPortfolio) * 100),
+				y: assetClass.asset_classes_amount,
+				z: Math.round((assetClass.asset_classes_amount / props.userAssetClassesData.totalPortfolio) * 100),
 			});
 		});
 
@@ -86,9 +76,7 @@ const AllocationsChart: React.FC = () => {
 	const series = getSeries();
 	const seriesIsEmpty =
 		series[0].data.length <= 0 ||
-		series[0].data.every(
-			(assetClass) => parseFloat(assetClass.y.replace(/,/g, "")) <= 0
-		);
+		series[0].data.every((assetClass) => assetClass.y <= 0);
 
 	return !seriesIsEmpty ? (
 		<Chart
