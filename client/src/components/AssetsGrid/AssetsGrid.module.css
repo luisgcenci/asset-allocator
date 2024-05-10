@@ -1,0 +1,11 @@
+.fixed-row {
+	background-color: lightgray;
+}
+
+.fixed-row:hover {
+	background-color: lightgray !important;
+}
+
+.delete-icon:hover {
+	cursor: pointer;
+}
