@@ -19,7 +19,7 @@ interface IAddAssetClassPopUp {
 }
 
 const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
-	props: IAddAssetClassPopUp
+	props: IAddAssetClassPopUp,
 ) => {
 	const [formData, setFormData] = React.useState({
 		name: "",
@@ -39,12 +39,12 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 	};
 
 	const handleTargetInput = (
-		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
 	) => {
 		let value = Number(e.target.value);
 
 		value =
-			isNaN(value) || value > 100 || value + totalTarget * 100 > 100
+			Number.isNaN(value) || value > 100 || value + totalTarget * 100 > 100
 				? formData.target
 				: value;
 

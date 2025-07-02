@@ -1,10 +1,10 @@
-import { Select, SelectChangeEvent } from "@mui/material";
-import { GridRenderCellParams, useGridApiContext } from "@mui/x-data-grid";
+import { Select, type SelectChangeEvent } from "@mui/material";
+import { type GridRenderCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { useAppSelector } from "hooks/hooks";
 import React from "react";
 
 export const SelectEditInputCell: React.FC<GridRenderCellParams> = (
-	props: GridRenderCellParams
+	props: GridRenderCellParams,
 ) => {
 	const { id, value, field } = props;
 	const apiRef = useGridApiContext();
@@ -26,7 +26,7 @@ export const SelectEditInputCell: React.FC<GridRenderCellParams> = (
 
 			assetClasses.forEach((assetClass) => {
 				assetClassesNames.push(
-					<option key={assetClass.id}>{assetClass.asset_classes_name}</option>
+					<option key={assetClass.id}>{assetClass.asset_classes_name}</option>,
 				);
 			});
 
@@ -34,7 +34,7 @@ export const SelectEditInputCell: React.FC<GridRenderCellParams> = (
 		} catch (e) {
 			console.log(e);
 			throw new Error(
-				"Failed to load options for asset classes column in asset table. "
+				"Failed to load options for asset classes column in asset table. ",
 			);
 		}
 	};

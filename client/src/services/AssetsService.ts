@@ -1,5 +1,5 @@
 import PocketBase from "pocketbase";
-import { AssetClass } from "./AssetClasses";
+import type { AssetClass } from "./AssetClasses";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
 
@@ -20,7 +20,7 @@ type Asset = {
 const createAsset = async (
 	name: string,
 	marketValue: number,
-	assetClass: string
+	assetClass: string,
 ): Promise<Asset> => {
 	const asset = {
 		asset_userid: "0wv6i9siap9vn4u",
@@ -55,7 +55,7 @@ const update = async (
 	id: string,
 	name: string,
 	marketValue: number,
-	assetClass: string
+	assetClass: string,
 ): Promise<boolean> => {
 	const data = {
 		asset_name: name,

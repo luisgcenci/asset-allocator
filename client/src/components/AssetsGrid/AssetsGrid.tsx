@@ -1,12 +1,12 @@
-import { DataGrid, GridColDef, GridRowModel } from "@mui/x-data-grid";
-import React from "react";
-import styles from "./AssetsGrid.module.css";
 import DeleteIcon from "@mui/icons-material/Delete";
-import Assets from "services/AssetsService";
+import { DataGrid, type GridColDef, type GridRowModel } from "@mui/x-data-grid";
 import { SelectEditInputCell } from "components/SelectEditInputCell/SelectEditInputCell";
-import AssetsService from "services/AssetsService";
 import { useAppDispatch, useAppSelector } from "hooks/hooks";
+import React from "react";
+import Assets from "services/AssetsService";
+import AssetsService from "services/AssetsService";
 import { updateAll } from "store/features/dataSlice";
+import styles from "./AssetsGrid.module.css";
 
 export const AssetsGrid: React.FC = React.memo(() => {
 	const data = useAppSelector((state) => state.data);
@@ -94,7 +94,7 @@ export const AssetsGrid: React.FC = React.memo(() => {
 
 		if (!assetClassId) {
 			throw new Error(
-				`Couldn't find an existing asset class id mapped to ${newRow.assetClass} `
+				`Couldn't find an existing asset class id mapped to ${newRow.assetClass} `,
 			);
 		}
 
@@ -102,7 +102,7 @@ export const AssetsGrid: React.FC = React.memo(() => {
 			newRow.id,
 			newRow.asset,
 			newRow.marketValue,
-			assetClassId
+			assetClassId,
 		);
 
 		await dispatch(updateAll());

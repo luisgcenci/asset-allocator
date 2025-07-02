@@ -12,7 +12,7 @@ type AssetClass = {
 
 const createAssetClass = async (
 	name: string,
-	target: number
+	target: number,
 ): Promise<AssetClass> => {
 	const assetClass = {
 		asset_classes_userid: "0wv6i9siap9vn4u",
@@ -40,7 +40,7 @@ const getAll = async (): Promise<AssetClass[]> => {
 const updateAssetClass = async (
 	id: string,
 	name: string,
-	target: number
+	target: number,
 ): Promise<boolean> => {
 	const data = {
 		asset_classes_name: name,

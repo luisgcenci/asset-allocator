@@ -1,11 +1,13 @@
-import styles from "./Assets.module.css";
-import Button from "@mui/material/Button";
-import React from "react";
-import AddIcon from "@mui/icons-material/Add";
-import { AssetsGrid } from "components/AssetsGrid/AssetsGrid";
-import AddAssetPopUp from "components/AddAssetPopUp/AddAssetPopUp";
+"use client";
 
-const Assets: React.FC = () => {
+import AddIcon from "@mui/icons-material/Add";
+import Button from "@mui/material/Button";
+import AddAssetPopUp from "components/AddAssetPopUp/AddAssetPopUp";
+import { AssetsGrid } from "components/AssetsGrid/AssetsGrid";
+import React from "react";
+import styles from "./Assets.module.css";
+
+export default function AssetsPage() {
 	const [openModal, setOpenModal] = React.useState(false);
 
 	const closeModal = () => {
@@ -29,6 +31,4 @@ const Assets: React.FC = () => {
 			</div>
 		</div>
 	);
-};
-
-export default Assets;
+}
