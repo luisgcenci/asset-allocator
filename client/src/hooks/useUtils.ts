@@ -18,7 +18,10 @@ export const useUtils = (): useUtilsResponseType => {
 	};
 
 	const calculateAllocation = (amount: number): number => {
-		return parseFloat((amount / data.totalPortfolio).toFixed(2));
+		const allocation = amount / data.totalPortfolio;
+		return Number.isNaN(allocation)
+			? 0
+			: Number.parseFloat(allocation.toFixed(2));
 	};
 
 	const useUtilsResponse: useUtilsResponseType = {

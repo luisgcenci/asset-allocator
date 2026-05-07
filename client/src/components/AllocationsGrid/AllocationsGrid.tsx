@@ -1,11 +1,12 @@
-import { DataGrid, GridColDef, GridRowModel } from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton, Tooltip } from "@mui/material";
+import { DataGrid, type GridColDef, type GridRowModel } from "@mui/x-data-grid";
+import { useAppDispatch, useAppSelector } from "hooks/hooks";
+import { useUtils } from "hooks/useUtils";
 import React from "react";
 import AssetClasses from "services/AssetClasses";
-import styles from "./AllocationsGrid.module.css";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useAppDispatch, useAppSelector } from "hooks/hooks";
 import { updateAll } from "store/features/dataSlice";
-import { useUtils } from "hooks/useUtils";
+import styles from "./AllocationsGrid.module.css";
 
 interface IAllocationsGrid {
 	simulation?: {
@@ -18,7 +19,10 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 		const data = useAppSelector((state) => state.data);
 		const dispatch = useAppDispatch();
 		const { sumMarketValue, calculateAllocation } = useUtils();
-		const columns: GridColDef[] = [
+
+		const columns: GridColDef[] = [];
+
+		columns.push(
 			{
 				field: "assetClass",
 				headerName: "Asset class",
@@ -34,9 +38,13 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 				editable: false,
 				headerAlign: "center",
 				align: "center",
-				valueFormatter: ({ value }) => `€${Number(value).toLocaleString()}`,
+				valueFormatter: ({ value, id }) =>
+					id === "-1" ? "" : `€${Number(value).toLocaleString()}`,
 			},
-			{
+		);
+
+		if (props.simulation) {
+			columns.push({
 				field: "newAmount",
 				headerName: "",
 				flex: 1,
@@ -45,7 +53,7 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 				headerAlign: "center",
 				align: "left",
 				renderCell: ({ value }) => {
-					return value != 0 ? (
+					return value !== 0 ? (
 						<span style={{ color: value > 0 ? "green" : "red" }}>
 							{Number(value).toLocaleString("en-US", {
 								style: "currency",
@@ -56,16 +64,20 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 						""
 					);
 				},
-			},
-			{
-				field: "currentAllocation",
-				headerName: "Allocation",
-				flex: 0.5,
-				headerAlign: "center",
-				align: "center",
-				valueFormatter: ({ value }) => `${value}%`,
-			},
-			{
+			});
+		}
+
+		columns.push({
+			field: "currentAllocation",
+			headerName: "Allocation",
+			flex: 0.5,
+			headerAlign: "center",
+			align: "center",
+			valueFormatter: ({ value, id }) => (id === "-1" ? "" : `${value}%`),
+		});
+
+		if (props.simulation) {
+			columns.push({
 				field: "newAllocation",
 				headerName: "",
 				flex: 1,
@@ -76,22 +88,20 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 				renderCell: ({ value }) => {
 					return value[0] > 0 ? (
 						<>
-							{value[1] != 0 && (
+							{value[1] !== 0 && (
 								<span style={{ color: "orange", paddingRight: "1vw" }}>
 									{Math.round(value[0] * 100)}%
 								</span>
 							)}
 
-							{value[1] != 0 && (
+							{value[1] !== 0 && (
 								<span
 									style={{
 										color: value[1] > 0 ? "green" : "red",
 										fontSize: "10px",
 									}}
 								>
-									{value[1] > 0
-										? "(+" + value[1] + "%)"
-										: "(" + value[1] + "%)"}
+									{value[1] > 0 ? `(+${value[1]}%)` : `(${value[1]}%)`}
 								</span>
 							)}
 						</>
@@ -99,7 +109,10 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 						""
 					);
 				},
-			},
+			});
+		}
+
+		columns.push(
 			{
 				field: "targetAllocation",
 				headerName: "Target",
@@ -116,21 +129,34 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 				headerAlign: "center",
 				align: "center",
 				renderCell: ({ id }) => {
+					const deleteIsDisabled = sumMarketValue(id.toString()) > 0;
 					return (
-						id != -1 && (
-							<DeleteIcon
-								onClick={() => handleDelete(id.toString())}
-								className={styles["delete-icon"]}
-							/>
+						id !== "-1" && (
+							<Tooltip
+								followCursor
+								title={
+									deleteIsDisabled &&
+									"Make sure all assets linked to this asset class are deleted."
+								}
+							>
+								<span>
+									<IconButton
+										onClick={() => handleDelete(id.toString())}
+										disabled={deleteIsDisabled}
+									>
+										<DeleteIcon className={styles["delete-icon"]} />
+									</IconButton>
+								</span>
+							</Tooltip>
 						)
 					);
 				},
 			},
-		];
+		);
 
 		const handleDelete = async (id: string) => {
 			const assetClassIsLinked = data.assets.some(
-				(asset) => asset.expand.asset_class.id === id
+				(asset) => asset.expand.asset_class.id === id,
 			);
 
 			if (!assetClassIsLinked) {
@@ -152,11 +178,12 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 		const getRows = (): RowsType[] => {
 			const response: RowsType[] = [];
 
-			data.assetClasses.forEach((assetClass) => {
+			for (let i = 0; i < data.assetClasses.length; i++) {
+				const assetClass = data.assetClasses[i];
 				const currentAmount = sumMarketValue(assetClass.id);
 				const currentAllocation = calculateAllocation(currentAmount);
 				const newAmount =
-					props.simulation?.data.find((d) => d.asset_class_id == assetClass.id)
+					props.simulation?.data.find((d) => d.asset_class_id === assetClass.id)
 						?.allocate ?? 0;
 				const newAllocation = calculateAllocation(currentAmount + newAmount);
 				const allocationChange = newAllocation - currentAllocation;
@@ -166,20 +193,22 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 					assetClass: assetClass.asset_classes_name,
 					currentAmount: currentAmount,
 					newAmount: newAmount,
-					currentAllocation: parseFloat((currentAllocation * 100).toFixed(2)),
+					currentAllocation: Number.parseFloat(
+						(currentAllocation * 100).toFixed(2),
+					),
 					newAllocation: [
 						newAllocation,
-						parseFloat((allocationChange * 100).toFixed(2)),
+						Number.parseFloat((allocationChange * 100).toFixed(2)),
 					],
-					targetAllocation: parseFloat(
-						(assetClass.asset_classes_target * 100).toFixed(2)
+					targetAllocation: Number.parseFloat(
+						(assetClass.asset_classes_target * 100).toFixed(2),
 					),
 				});
-			});
+			}
 
 			if (data.totalTarget < 1) {
 				const notDefinedTarget = props.simulation?.data.find(
-					(item) => item.asset_class_id == "-1"
+					(item) => item.asset_class_id === "-1",
 				);
 				let newCurrentAllocation = 0;
 				let newAmount = 0;
@@ -197,8 +226,8 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 					newAmount: newAmount,
 					currentAllocation: 0,
 					newAllocation: [newCurrentAllocation, newCurrentAllocation],
-					targetAllocation: parseFloat(
-						((1 - data.totalTarget) * 100).toFixed(2)
+					targetAllocation: Number.parseFloat(
+						((1 - data.totalTarget) * 100).toFixed(2),
 					),
 				});
 			}
@@ -208,12 +237,14 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 
 		const handleRowUpdate = async (
 			newRow: GridRowModel,
-			oldRow: GridRowModel
+			oldRow: GridRowModel,
 		): Promise<GridRowModel> => {
 			const newTargetAsNum =
-				parseFloat(parseFloat(newRow.targetAllocation).toFixed(0)) / 100;
+				Number.parseFloat(
+					Number.parseFloat(newRow.targetAllocation).toFixed(0),
+				) / 100;
 
-			if (isNaN(newTargetAsNum) || newTargetAsNum > 1) {
+			if (Number.isNaN(newTargetAsNum) || newTargetAsNum > 1) {
 				return oldRow;
 			}
 
@@ -224,7 +255,7 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 				await AssetClasses.updateAssetClass(
 					newRow.id,
 					newRow.assetClass,
-					newTargetAsNum
+					newTargetAsNum,
 				);
 
 				await dispatch(updateAll());
@@ -236,20 +267,21 @@ export const AllocationsGrid: React.FC<IAllocationsGrid> = React.memo(
 
 		return (
 			<DataGrid
+				style={{ width: "100%" }}
 				autoHeight
 				experimentalFeatures={{ newEditingApi: true }}
 				columns={columns}
 				rows={getRows()}
 				editMode="row"
-				isCellEditable={(params) => params.id != -1}
-				isRowSelectable={(params) => params.id != -1}
+				isCellEditable={(params) => params.id !== "-1"}
+				isRowSelectable={(params) => params.id !== "-1"}
 				getRowClassName={(params) =>
-					params.id == -1 ? styles["fixed-row"] : ""
+					params.id === "-1" ? styles["fixed-row"] : ""
 				}
 				processRowUpdate={handleRowUpdate}
 			/>
 		);
-	}
+	},
 );
 
 AllocationsGrid.displayName = "Allocation Grid";

@@ -33,7 +33,7 @@ const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 		await AssetsService.createAsset(
 			formData.name,
 			formData.marketValue,
-			formData.assetClass
+			formData.assetClass,
 		);
 
 		setAlert(<Alert severity="success">new asset saved</Alert>);
@@ -41,11 +41,11 @@ const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 	};
 
 	const handleMarketValueInput = (
-		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+		e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>,
 	) => {
 		const value = e.target.value.replace(/,/g, "");
 		let valueAsNum = Number(value);
-		valueAsNum = isNaN(valueAsNum) ? formData.marketValue : valueAsNum;
+		valueAsNum = Number.isNaN(valueAsNum) ? formData.marketValue : valueAsNum;
 		setFormData({ ...formData, marketValue: valueAsNum });
 	};
 

@@ -1,6 +1,7 @@
 import PocketBase from "pocketbase";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
+const mockedAssetUserId = "0wv6i9siap9vn4u";
 
 type AssetClass = {
 	id: string;
@@ -12,10 +13,10 @@ type AssetClass = {
 
 const createAssetClass = async (
 	name: string,
-	target: number
+	target: number,
 ): Promise<AssetClass> => {
 	const assetClass = {
-		asset_classes_userid: "0wv6i9siap9vn4u",
+		asset_classes_userid: mockedAssetUserId,
 		asset_classes_name: name,
 		asset_classes_target: target,
 	};
@@ -30,7 +31,11 @@ const createAssetClass = async (
 
 const getAll = async (): Promise<AssetClass[]> => {
 	try {
-		return await pb.collection("asset_classes").getFullList<AssetClass>();
+		const data = await pb.collection("asset_classes").getFullList<AssetClass>({
+			filter: `asset_classes_userid="${mockedAssetUserId}"`,
+		});
+
+		return data;
 	} catch (e) {
 		console.log(e);
 		throw new Error("Failed to fetch asset classes");
@@ -40,9 +45,10 @@ const getAll = async (): Promise<AssetClass[]> => {
 const updateAssetClass = async (
 	id: string,
 	name: string,
-	target: number
+	target: number,
 ): Promise<boolean> => {
 	const data = {
+		asset_classes_userid: mockedAssetUserId,
 		asset_classes_name: name,
 		asset_classes_target: target,
 	};

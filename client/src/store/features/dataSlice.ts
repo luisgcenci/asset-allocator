@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import AssetClasses, { AssetClass } from "services/AssetClasses";
-import AssetsService, { UserAssetsData } from "services/AssetsService";
+import AssetClasses, { type AssetClass } from "services/AssetClasses";
+import AssetsService, { type UserAssetsData } from "services/AssetsService";
 
-interface dataState {
+export interface dataState {
 	assets: UserAssetsData[];
 	assetClasses: AssetClass[];
 	assetClassesNamesMapping: Map<string, string>;
@@ -27,9 +27,11 @@ const dataSlice = createSlice({
 		mapAssetClassesNames(state) {
 			const assetClasses = state.assetClasses;
 			const map = new Map<string, string>();
-			assetClasses.forEach((assetClass) => {
+
+			for (let i = 0; i < assetClasses.length; i++) {
+				const assetClass = assetClasses[i];
 				map.set(assetClass.asset_classes_name, assetClass.id);
-			});
+			}
 
 			state.assetClassesNamesMapping = map;
 		},
@@ -38,16 +40,16 @@ const dataSlice = createSlice({
 				(sum, { asset_market_value }) => {
 					return sum + asset_market_value;
 				},
-				0
+				0,
 			);
 		},
 		calculateTotalTarget(state) {
-			state.totalTarget = parseFloat(
+			state.totalTarget = Number.parseFloat(
 				state.assetClasses
 					.reduce((sum, { asset_classes_target }) => {
 						return sum + asset_classes_target;
 					}, 0)
-					.toFixed(2)
+					.toFixed(2),
 			);
 		},
 	},
@@ -72,7 +74,7 @@ export const getAllAssetClasses = createAsyncThunk(
 	"data/getAllAssetClasses",
 	async () => {
 		return await AssetClasses.getAll();
-	}
+	},
 );
 
 export const updateAll = createAsyncThunk(
@@ -83,7 +85,7 @@ export const updateAll = createAsyncThunk(
 		dispatch(calculateTotalPortfolio());
 		dispatch(calculateTotalTarget());
 		dispatch(mapAssetClassesNames());
-	}
+	},
 );
 
 export const {

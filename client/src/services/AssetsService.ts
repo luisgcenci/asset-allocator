@@ -1,7 +1,8 @@
 import PocketBase from "pocketbase";
-import { AssetClass } from "./AssetClasses";
+import type { AssetClass } from "./AssetClasses";
 
 const pb = new PocketBase("http://127.0.0.1:8090");
+const mockedAssetUserId = "0wv6i9siap9vn4u";
 
 type UserAssetsData = Asset & {
 	expand: {
@@ -20,16 +21,23 @@ type Asset = {
 const createAsset = async (
 	name: string,
 	marketValue: number,
-	assetClass: string
+	assetClass: string,
 ): Promise<Asset> => {
 	const asset = {
-		asset_userid: "0wv6i9siap9vn4u",
+		asset_userid: mockedAssetUserId,
 		asset_name: name,
 		asset_market_value: marketValue,
 		asset_class: assetClass,
 	};
 
 	try {
+		// check if the asset class exists
+		const assetClassExists = await pb
+			.collection("asset_classes")
+			.getFullList<AssetClass>({
+				filter: `asset_classes_userid="${mockedAssetUserId}" && asset_classes_name="${assetClass}"`,
+			});
+
 		return await pb.collection("assets").create(asset);
 	} catch (e) {
 		console.log(e);
@@ -42,6 +50,7 @@ const getAllAssets = async (): Promise<UserAssetsData[]> => {
 		const assets = await pb.collection("assets").getFullList<UserAssetsData>({
 			sort: "-created",
 			expand: "asset_class",
+			filter: `asset_userid="${mockedAssetUserId}"`,
 		});
 
 		return assets;
@@ -55,12 +64,13 @@ const update = async (
 	id: string,
 	name: string,
 	marketValue: number,
-	assetClass: string
+	assetClass: string,
 ): Promise<boolean> => {
 	const data = {
 		asset_name: name,
 		asset_market_value: marketValue,
 		asset_class: assetClass,
+		asset_userid: mockedAssetUserId,
 	};
 
 	try {
