@@ -1,7 +1,7 @@
-import React from "react";
+import { useAppSelector } from "hooks/hooks";
+import type React from "react";
 import Chart from "react-apexcharts";
 import styles from "./AllocationsChart.module.css";
-import { useAppSelector } from "hooks/hooks";
 
 const AllocationsChart: React.FC = () => {
 	const data = useAppSelector((state) => state.data);
@@ -27,7 +27,7 @@ const AllocationsChart: React.FC = () => {
 							series: Array<{ data: [{ x: string; y: number; z: string }] }>;
 						};
 					};
-				}
+				},
 			) => {
 				const infoPath =
 					op.w.config.series[op.seriesIndex].data[op.dataPointIndex];
@@ -55,21 +55,18 @@ const AllocationsChart: React.FC = () => {
 		data.assetClasses.map((assetClass) => {
 			const assetClassTotalAmount = data.assets.reduce(
 				(sum, { asset_market_value, expand }) => {
+
 					if (expand.asset_class.id === assetClass.id) {
 						return sum + asset_market_value;
 					}
 					return sum;
 				},
-				0
+				0,
 			);
 
 			seriesData.push({
 				x: assetClass.asset_classes_name,
-				y: assetClassTotalAmount.toLocaleString("en-US", {
-					style: "decimal",
-					minimumFractionDigits: 0,
-					maximumFractionDigits: 0,
-				}),
+				y: assetClassTotalAmount.toString(),
 				z: Math.round((assetClassTotalAmount / data.totalPortfolio) * 100),
 			});
 		});
@@ -87,7 +84,7 @@ const AllocationsChart: React.FC = () => {
 	const seriesIsEmpty =
 		series[0].data.length <= 0 ||
 		series[0].data.every(
-			(assetClass) => parseFloat(assetClass.y.replace(/,/g, "")) <= 0
+			(assetClass) => Number.parseFloat(assetClass.y.replace(/,/g, "")) <= 0,
 		);
 
 	return !seriesIsEmpty ? (

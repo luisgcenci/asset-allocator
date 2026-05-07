@@ -1,4 +1,59 @@
 .Home {
+	display: flex;
 	flex: 1;
-	padding: 12px 24px;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.ChartAndTotal {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 1vw;
+	width: 100%;
+	height: 50vh;
+}
+
+.TotalContainer {
+	flex: 1;
+	display: flex;
+	height: 100%;
+	border: 1px solid #000;
+	align-items: center;
+	justify-content: center;
+}
+
+.Total {
+	text-align: center;
+}
+
+.Chart {
+	flex: 2;
+	height: 100%;
+}
+
+.Rebalance {
+	width: 100%;
+}
+
+.Rebalance button {
+	padding: 2vh !important;
+}
+
+.Table {
+	width: 80%;
+	padding: 2vh 0 !important;
+}
+
+.Buttons {
+	display: flex;
+	flex-direction: row;
+	width: 70vw;
+	justify-content: space-between;
+	padding: 2vh 0;
+}
+
+.PageTitle {
+	padding: 4vh 0;
 }

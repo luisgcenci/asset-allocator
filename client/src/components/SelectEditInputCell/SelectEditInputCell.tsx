@@ -1,10 +1,10 @@
-import { Select, SelectChangeEvent } from "@mui/material";
-import { GridRenderCellParams, useGridApiContext } from "@mui/x-data-grid";
+import { Select, type SelectChangeEvent } from "@mui/material";
+import { type GridRenderCellParams, useGridApiContext } from "@mui/x-data-grid";
 import { useAppSelector } from "hooks/hooks";
-import React from "react";
+import React, { useCallback } from "react";
 
 export const SelectEditInputCell: React.FC<GridRenderCellParams> = (
-	props: GridRenderCellParams
+	props: GridRenderCellParams,
 ) => {
 	const { id, value, field } = props;
 	const apiRef = useGridApiContext();
@@ -20,28 +20,29 @@ export const SelectEditInputCell: React.FC<GridRenderCellParams> = (
 		apiRef.current.stopCellEditMode({ id, field });
 	};
 
-	const fetchOptions = async () => {
+	const fetchOptions = useCallback(async () => {
 		try {
 			const assetClassesNames: JSX.Element[] = [];
 
-			assetClasses.forEach((assetClass) => {
+			for (let i = 0; i < assetClasses.length; i++) {
+				const assetClass = assetClasses[i];
 				assetClassesNames.push(
-					<option key={assetClass.id}>{assetClass.asset_classes_name}</option>
+					<option key={assetClass.id}>{assetClass.asset_classes_name}</option>,
 				);
-			});
+			}
 
 			setOptions(assetClassesNames);
 		} catch (e) {
 			console.log(e);
 			throw new Error(
-				"Failed to load options for asset classes column in asset table. "
+				"Failed to load options for asset classes column in asset table. ",
 			);
 		}
-	};
+	}, [assetClasses]);
 
 	React.useEffect(() => {
 		fetchOptions();
-	}, []);
+	}, [fetchOptions]);
 
 	return (
 		<Select

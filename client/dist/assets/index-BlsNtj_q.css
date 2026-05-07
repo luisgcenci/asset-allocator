@@ -1,0 +1,106 @@
+._EmptyChartMessage_1ij3o_1 {
+	height: 100%;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+._Home_j84i7_1 {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: flex-start;
+}
+._ChartAndTotal_j84i7_8 {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 50vh;
+}
+._TotalContainer_j84i7_17 {
+	flex: 1;
+	display: flex;
+	height: 100%;
+	border: 1px solid #000;
+	align-items: center;
+	justify-content: center;
+}
+._Total_j84i7_17 {
+	text-align: center;
+}
+._Chart_j84i7_8 {
+	flex: 2;
+	height: 100%;
+}
+._Rebalance_j84i7_35 {
+	width: 100%;
+}
+._Rebalance_j84i7_35 button {
+	padding: 2vh !important;
+}
+._Table_j84i7_43 {
+	width: 80%;
+	padding: 2vh 0 !important;
+}
+._Buttons_j84i7_48 {
+	display: flex;
+	flex-direction: row;
+	width: 70vw;
+	justify-content: space-between;
+	padding: 2vh 0;
+}
+._PageTitle_j84i7_56 {
+	padding: 4vh 0;
+}
+._fixed-row_k7bl1_1 {
+	background-color: #d3d3d3;
+}
+._fixed-row_k7bl1_1:hover {
+	background-color: #d3d3d3 !important;
+}
+._delete-icon_k7bl1_9:hover {
+	cursor: pointer;
+}
+._Investments_14t71_1 {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: flex-start;
+	width: 100%;
+}
+._Buttons_14t71_9 {
+	display: flex;
+	padding: 0 0 2vh;
+}
+._PageTitle_14t71_14 {
+	padding: 4vh 0;
+	width: 100%;
+}
+._Grid_14t71_19 {
+	width: 100%;
+}
+._Assets_14t71_23,
+._AssetClasses_14t71_24 {
+	width: 70%;
+}
+._Pages_5nq0s_1 {
+	flex: 1;
+	padding: 12px 24px;
+}
+html {
+	display: flex;
+	min-height: 100vh;
+	width: 100%;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+body {
+	display: flex;
+	flex: 1;
+	margin: 0;
+}
+#root {
+	display: flex;
+	flex: 1;
+}
