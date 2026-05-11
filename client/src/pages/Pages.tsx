@@ -11,12 +11,15 @@ import {
 	mapAssetClassesNames,
 } from "store/features/dataSlice";
 import styles from "./Pages.module.css";
+import { useNotification } from "hooks/useNotification";
+import { Notification } from "components/notification/Notification";
 
 const Pages: React.FC = () => {
 	const [value, setValue] = React.useState<number>(0);
 	const [loading, setLoading] = React.useState<boolean>(true);
 	const dispatch = useAppDispatch();
 	const data = useAppSelector((state) => state.data);
+	const { notification } = useNotification();
 
 	const handleChange = (event: React.SyntheticEvent, newValue: number) => {
 		setValue(newValue);
@@ -45,7 +48,12 @@ const Pages: React.FC = () => {
 	}
 
 	return (
-		<Box className={styles.Pages}>
+		<Box sx={{
+			flex: 1,
+			padding: "12px 24px",
+			display: "flex",
+			flexDirection: "column",
+		}}>
 			<Box className={styles.Tabs}>
 				<Tabs value={value} onChange={handleChange}>
 					<Tab label="HOME" />
@@ -53,6 +61,7 @@ const Pages: React.FC = () => {
 				</Tabs>
 			</Box>
 			{renderContent()}
+			{notification && <Notification />}
 		</Box>
 	);
 };

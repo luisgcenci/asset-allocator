@@ -6,6 +6,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { persistor, store } from "./store/store";
 import "./css/index.css";
+import { NotificationProvider } from "providers/notification/NotificationProvider";
 
 const root = ReactDOM.createRoot(
 	document.getElementById("root") as HTMLElement,
@@ -14,9 +15,11 @@ const root = ReactDOM.createRoot(
 root.render(
 	<Router>
 		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistor}>
-				<App />
-			</PersistGate>
+			<NotificationProvider>
+				<PersistGate loading={null} persistor={persistor}>
+					<App />
+				</PersistGate>
+			</NotificationProvider>
 		</Provider>
 	</Router>,
 );
