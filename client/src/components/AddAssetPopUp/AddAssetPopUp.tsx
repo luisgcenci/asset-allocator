@@ -10,6 +10,7 @@ import {
 	TextField,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "hooks/hooks";
+import { useNotification } from "hooks/useNotification";
 import React from "react";
 import AssetsService from "services/AssetsService";
 import { updateAll } from "store/features/dataSlice";
@@ -25,7 +26,7 @@ const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 		marketValue: 0,
 		assetClass: "",
 	});
-	const [alert, setAlert] = React.useState<React.ReactNode>();
+	const { showNotification } = useNotification();
 	const dispatch = useAppDispatch();
 	const data = useAppSelector((state) => state.data);
 
@@ -36,7 +37,8 @@ const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 			formData.assetClass,
 		);
 
-		setAlert(<Alert severity="success">new asset saved</Alert>);
+		showNotification("New asset saved", "success");
+
 		dispatch(updateAll());
 	};
 
@@ -50,7 +52,7 @@ const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 	};
 
 	return (
-		<Dialog open={props.open} onClose={props.closeModal}>
+		<Dialog open={props.open} onClose={props.closeModal} fullWidth>
 			<DialogTitle align="center" style={{ paddingTop: "3vh" }}>
 				ADD NEW ASSET
 			</DialogTitle>
@@ -132,7 +134,6 @@ const AddAssetPopUp: React.FC<IAddAssetPopUp> = (props: IAddAssetPopUp) => {
 					Save
 				</Button>
 			</DialogActions>
-			<DialogContent>{alert}</DialogContent>
 		</Dialog>
 	);
 };

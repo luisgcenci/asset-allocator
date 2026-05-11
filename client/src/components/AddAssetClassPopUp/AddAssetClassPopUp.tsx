@@ -9,7 +9,8 @@ import {
 	TextField,
 } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "hooks/hooks";
-import React from "react";
+import { useNotification } from "hooks/useNotification";
+import React, { useEffect } from "react";
 import AssetClasses from "services/AssetClasses";
 import { updateAll } from "store/features/dataSlice";
 
@@ -26,14 +27,14 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 		amount: 0,
 		target: 0,
 	});
-	const [alert, setAlert] = React.useState<React.ReactNode>();
 	const totalTarget = useAppSelector((state) => state.data.totalTarget);
 	const dispatch = useAppDispatch();
+	const { showNotification } = useNotification();
 
 	const handleSave = async () => {
 		await AssetClasses.createAssetClass(formData.name, formData.target / 100);
 
-		setAlert(<Alert severity="success">new asset saved</Alert>);
+		showNotification("New asset class saved", "success");
 
 		await dispatch(updateAll());
 	};
@@ -50,6 +51,7 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 
 		setFormData({ ...formData, target: value });
 	};
+
 	return (
 		<Dialog open={props.open} onClose={props.closeModal}>
 			<DialogTitle align="center" style={{ paddingTop: "3vh" }}>
@@ -104,7 +106,6 @@ const AddAssetClassPopUp: React.FC<IAddAssetClassPopUp> = (
 					Save
 				</Button>
 			</DialogActions>
-			<DialogContent>{alert}</DialogContent>
 		</Dialog>
 	);
 };
